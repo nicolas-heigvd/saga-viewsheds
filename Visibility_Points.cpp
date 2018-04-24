@@ -110,10 +110,10 @@ CVisibility_Points::CVisibility_Points(void)
 
 		CSG_String::Format(SG_T("%s|%s|%s|%s|%s|"),
 			_TL("Visibility"),
-			_TL("Visibility sum"),
 			_TL("Shade"),
 			_TL("Distance"),
-			_TL("Size")
+			_TL("Size"),
+			_TL("Visibility sum")
 		), 1
 	);
 }

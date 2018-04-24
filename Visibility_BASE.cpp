@@ -144,12 +144,9 @@ void CVisibility_BASE::Set_Visibility(CSG_Grid *pDTM, CSG_Grid *pVisibility, int
 						pVisibility->Set_Value(x, y, 1);
 						break;
 						
-					case 1:		// Visibility_sum
-						vs = 1 + pVisibility->asDouble(x, y);
-						pVisibility->Set_Value(x, y, vs);
-						break;
+					
 
-					case 2:		// Shade
+					case 1:		// Shade
 						pDTM->Get_Gradient(x, y, decDTM, aziDTM);
 						decDTM	= M_PI_090 - atan(Exaggeration * tan(decDTM));
 
@@ -165,14 +162,14 @@ void CVisibility_BASE::Set_Visibility(CSG_Grid *pDTM, CSG_Grid *pVisibility, int
 							pVisibility->Set_Value(x, y, d);
 						break;
 
-					case 3:		// Distance
+					case 2:		// Distance
 						d		= pDTM->Get_Cellsize() * sqrt(dx*dx + dy*dy);
 
 						if( pVisibility->is_NoData(x, y) || pVisibility->asDouble(x, y) > d )
 							pVisibility->Set_Value(x, y, d);
 						break;
 
-					case 4:		// Size
+					case 3:		// Size
 						if( (d = pDTM->Get_Cellsize() * sqrt(dx*dx + dy*dy)) > 0.0 )
 						{
 							d	= atan2(dHeight, d);
@@ -180,6 +177,12 @@ void CVisibility_BASE::Set_Visibility(CSG_Grid *pDTM, CSG_Grid *pVisibility, int
 								pVisibility->Set_Value(x, y, d);
 						}
 						break;
+					
+					case 4:		// Visibility_sum
+						vs = 1 + pVisibility->asDouble(x, y);
+						pVisibility->Set_Value(x, y, vs);
+						break;
+						
 					}
 				}
 			}
@@ -225,7 +228,7 @@ bool CVisibility_BASE::Trace_Point(CSG_Grid *pDTM, int x, int y, double dx, doub
 
 			if( !pDTM->is_InGrid(x, y) )
 			{
-				return( true );
+				return( false ); //--
 			}
 			else if( iz < pDTM->asDouble(x, y) )
 			{
@@ -233,7 +236,7 @@ bool CVisibility_BASE::Trace_Point(CSG_Grid *pDTM, int x, int y, double dx, doub
 			}
 			else if( iz > pDTM->Get_Max() )
 			{
-				return( true );
+				return( true ); 
 			}
 		}
 	}
@@ -253,20 +256,21 @@ void CVisibility_BASE::Finalize(CSG_Grid *pVisibility, int iMethod)
 		Parameters.Add_Range("", "METRIC_ZRANGE", SG_T(""), SG_T(""), 0.0, 1.0);
 		SG_UI_DataObject_Update(pVisibility, true, &Parameters);
 		break;
-	
-	case 1:		// Visibility_sum
-		Parameters.Add_Range("", "METRIC_ZRANGE", SG_T(""), SG_T(""), 0.0, 16777216.0);
-		SG_UI_DataObject_Update(pVisibility, true, &Parameters);
-		break;
 
-	case 2:		// Shade
+	case 1:		// Shade
 		Parameters.Add_Range("", "METRIC_ZRANGE", SG_T(""), SG_T(""), 0.0, M_PI_090);
 		SG_UI_DataObject_Update(pVisibility, true, &Parameters);
 		break;
 
-	case 3:		// Distance
-	case 4:		// Size
+	case 2:		// Distance
+	
+	case 3:		// Size
 		SG_UI_DataObject_Show(pVisibility, true);
+		break;
+	
+	case 4:		// Visibility_sum
+		Parameters.Add_Range("", "METRIC_ZRANGE", SG_T(""), SG_T(""), 0.0, 16777216.0);
+		SG_UI_DataObject_Update(pVisibility, true, &Parameters);
 		break;
 	}
 
