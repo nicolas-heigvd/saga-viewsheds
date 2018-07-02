@@ -82,28 +82,28 @@ void CVisibility_BASE::Initialize(CSG_Grid *pVisibility, int iMethod)
 		Colors.Set_Count(2);
 		Colors.Set_Ramp(SG_GET_RGB(0, 0, 0), SG_GET_RGB(255, 255, 255));
 		break;
-		
-	case 1:		// Visibility_sum
-		pVisibility->Assign(0.0);
-		Colors.Set_Count(256);
-		Colors.Set_Ramp(SG_GET_RGB(0, 0, 0), SG_GET_RGB(255, 255, 255));
-		break;
 
-	case 2:		// Shade
+	case 1:		// Shade
 		pVisibility->Assign(M_PI_090);
 		pVisibility->Set_Unit(_TL("radians"));
 		Colors.Set_Ramp(SG_GET_RGB(255, 255, 255), SG_GET_RGB(0, 0, 0));
 		break;
 
-	case 3:		// Distance
+	case 2:		// Distance
 		pVisibility->Assign_NoData();
 		Colors.Set_Ramp(SG_GET_RGB(255, 255, 191), SG_GET_RGB(0, 95, 0));
 		break;
 
-	case 4:		// Size
+	case 3:		// Size
 		pVisibility->Assign_NoData();
 		pVisibility->Set_Unit(_TL("radians"));
 		Colors.Set_Ramp(SG_GET_RGB(0, 95, 0), SG_GET_RGB(255, 255, 191));
+		break;
+	
+	case 4:		// Visibility_sum
+		pVisibility->Assign(0.0);
+		Colors.Set_Count(256);
+		Colors.Set_Ramp(SG_GET_RGB(0, 0, 0), SG_GET_RGB(255, 255, 255));
 		break;
 	}
 
